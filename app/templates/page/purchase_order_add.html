@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>layui</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="{% static 'lib/layui-v2.6.3/css/layui.css' %}" media="all">
+  <link rel="stylesheet" href="{% static 'css/public.css' %}" media="all">
+  <style>
+      body {
+          background-color: #ffffff;
+      }
+  </style>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+  {% csrf_token %}
+  <div class="layui-form-item">
+    <label class="layui-form-label">采购订单编号</label>
+    <div class="layui-input-block">
+      <input type="text" name="order_code" placeholder="采购订单编号" class="layui-input"/>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">商品编号</label>
+    <div class="layui-input-block">
+      <input type="text" name="product_code" placeholder="商品编号" class="layui-input"/>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">来源供应商编号</label>
+    <div class="layui-input-block">
+      <input type="text" name="supplier_code" placeholder="来源供应商编号" class="layui-input"/>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">采购数量</label>
+    <div class="layui-input-block">
+      <input type="text" name="quantity" placeholder="采购数量" class="layui-input"/>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">采购员</label>
+    <div class="layui-input-block">
+      <input type="text" name="purchaser" placeholder="采购员" class="layui-input"/>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">入库仓库</label>
+    <div class="layui-input-block">
+      <input type="text" name="warehouse" placeholder="入库仓库" class="layui-input"/>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">采购时间</label>
+    <div class="layui-input-block">
+      <input type="text" name="purchase_time" placeholder="采购时间" class="layui-input"/>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">入库时间</label>
+    <div class="layui-input-block">
+      <input type="text" name="arrival_time" placeholder="入库时间" class="layui-input"/>
+    </div>
+  </div>
+
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+    </div>
+  </div>
+</div>
+<script src="{% static 'lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.$
+            , laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#date1'
+        });
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            $.post('/add_purchase_order/', data.field, function (res) {
+                if (res['code'] === 200) {
+                    var iframeIndex = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(iframeIndex);
+                    window.parent.location.reload()
+                } else {
+                    layer.msg(res['msg'])
+                    return false
+                }
+            })
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

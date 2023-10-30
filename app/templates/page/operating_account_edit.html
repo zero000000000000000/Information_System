@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>layui</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="{% static 'lib/layui-v2.6.3/css/layui.css' %}" media="all">
+  <link rel="stylesheet" href="{% static 'css/public.css' %}" media="all">
+  <style>
+      body {
+          background-color: #ffffff;
+      }
+  </style>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+  {% csrf_token %}
+  <input type="hidden" name="id" value="{{ oa.id }}">
+  <div class="layui-form-item">
+    <label class="layui-form-label">运营账号编号</label>
+    <div class="layui-input-block">
+      <input type="text" name="account_number" value="{{ oa.account_number }}" class="layui-input"/>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">账号平台</label>
+    <div class="layui-input-block">
+      <input type="text" name="platform" value="{{ oa.platform }}" class="layui-input"/>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">账号主页</label>
+    <div class="layui-input-block">
+      <input type="url" name="account_homepage" value="{{ oa.account_homepage }}" class="layui-input"/>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">粉丝数</label>
+    <div class="layui-input-block">
+      <input type="number" name="fan_count" value="{{ oa.fan_count }}" class="layui-input"/>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">建立日期</label>
+    <div class="layui-input-block">
+      <input type="datetime-local" name="establishment_date" value="{{ oa.establishment_date|date:'Y-m-d\TH:i:s'  }}"
+             class="layui-input"/>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">运营主播编号</label>
+    <div class="layui-input-block">
+      <input type="text" name="operator_number" value="{{ oa.operator_number }}" class="layui-input"/>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">账号内容</label>
+    <div class="layui-input-block">
+      <input type="text" name="account" value="{{ oa.account_content }}" class="layui-input"/>
+    </div>
+  </div>
+
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">总视频数</label>
+    <div class="layui-input-block">
+      <input type="number" name="total_videos" value="{{ oa.total_videos }}" class="layui-input"/>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">总播放量</label>
+    <div class="layui-input-block">
+      <input type="number" name="total_views" value="{{ oa.total_views }}" class="layui-input"/>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+    </div>
+  </div>
+</div>
+<script src="{% static 'lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.$
+            , laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#date1'
+        });
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            $.post('/edit_operating_account/', data.field, function (res) {
+                if (res['code'] === 200) {
+                    var iframeIndex = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(iframeIndex);
+                    window.parent.location.reload()
+                } else {
+                    layer.msg(res['msg'])
+                    return false
+                }
+            })
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

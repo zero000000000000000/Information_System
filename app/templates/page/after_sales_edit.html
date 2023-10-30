@@ -1,0 +1,113 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>layui</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="{% static 'lib/layui-v2.6.3/css/layui.css' %}" media="all">
+  <link rel="stylesheet" href="{% static 'css/public.css' %}" media="all">
+  <style>
+      body {
+          background-color: #ffffff;
+      }
+  </style>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+  {% csrf_token %}
+  <input type="hidden" name="id" value="{{ instance.id }}">
+  <div class="layui-form-item">
+    <label class="layui-form-label">售后编号</label>
+    <div class="layui-input-block">
+      <input type="text" name="after_sales_code" value="{{ instance.after_sales_code }}" placeholder="售后编号" class="layui-input" />
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">销售编号</label>
+    <div class="layui-input-block">
+      <input type="text" name="sales_code" value="{{ instance.sales_code }}" placeholder="销售编号" class="layui-input" />
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">用户账号</label>
+    <div class="layui-input-block">
+      <input type="text" name="user_account" value="{{ instance.user_account }}" placeholder="用户账号" class="layui-input" />
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">手机号码</label>
+    <div class="layui-input-block">
+      <input type="text" name="phone_number" value="{{ instance.phone_number }}" placeholder="手机号码" class="layui-input" />
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">申请售后类型</label>
+    <div class="layui-input-block">
+      <input type="text" name="after_sales_type" value="{{ instance.after_sales_type }}" placeholder="申请售后类型" class="layui-input" />
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">申请原因</label>
+    <div class="layui-input-block">
+      <textarea name="reason" placeholder="申请原因" class="layui-textarea">{{ instance.reason }}</textarea>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">发起售后时间</label>
+    <div class="layui-input-block">
+      <input type="datetime-loca" name="initiation_time" value="{{ instance.initiation_time|date:'Y-m-d\TH:i:s'  }}" placeholder="发起售后时间" class="layui-input" />
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">售后状态</label>
+    <div class="layui-input-block">
+      <input type="text" name="status" value="{{ instance.status }}" placeholder="售后状态" class="layui-input" />
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+    </div>
+  </div>
+</div>
+<script src="{% static 'lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.$
+            , laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#date1'
+        });
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            $.post('/edit_after_sales/', data.field, function (res) {
+                if (res['code'] === 200) {
+                    var iframeIndex = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(iframeIndex);
+                    window.parent.location.reload()
+                } else {
+                    layer.msg(res['msg'])
+                    return false
+                }
+            })
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

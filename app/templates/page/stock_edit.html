@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>layui</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="{% static 'lib/layui-v2.6.3/css/layui.css' %}" media="all">
+  <link rel="stylesheet" href="{% static 'css/public.css' %}" media="all">
+  <style>
+      body {
+          background-color: #ffffff;
+      }
+  </style>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+  {% csrf_token %}
+  <input type="hidden" name="id" value="{{ stock.id }}">
+  <div class="layui-form-item">
+    <label class="layui-form-label">商品编号</label>
+    <div class="layui-input-block">
+      <input type="text" name="product_code" placeholder="商品编号" class="layui-input" value="{{ stock.product_code }}"/>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">商品名称</label>
+    <div class="layui-input-block">
+      <input type="text" name="product_name" placeholder="商品名称" class="layui-input" value="{{ stock.product_name }}"/>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">规格</label>
+    <div class="layui-input-block">
+      <input type="text" name="specification" placeholder="规格" class="layui-input" value="{{ stock.specification }}"/>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">仓库编码</label>
+    <div class="layui-input-block">
+      <input type="text" name="warehouse_code" placeholder="仓库编码" class="layui-input"
+             value="{{ stock.warehouse_code }}"/>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">库存数量</label>
+    <div class="layui-input-block">
+      <input type="text" name="stock_quantity" placeholder="库存数量" class="layui-input"
+             value="{{ stock.stock_quantity }}"/>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">仓库管理员</label>
+    <div class="layui-input-block">
+      <input type="text" name="warehouse_manager" placeholder="仓库管理员" class="layui-input"
+             value="{{ stock.warehouse_manager }}"/>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+    </div>
+  </div>
+</div>
+<script src="{% static 'lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.$
+            , laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#date1'
+        });
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            $.post('/edit_stock/', data.field, function (res) {
+                if (res['code'] === 200) {
+                    var iframeIndex = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(iframeIndex);
+                    window.parent.location.reload()
+                } else {
+                    layer.msg(res['msg'])
+                    return false
+                }
+            })
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

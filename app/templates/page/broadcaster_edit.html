@@ -1,0 +1,114 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>layui</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="{% static 'lib/layui-v2.6.3/css/layui.css' %}" media="all">
+  <link rel="stylesheet" href="{% static 'css/public.css' %}" media="all">
+  <style>
+      body {
+          background-color: #ffffff;
+      }
+  </style>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+  {% csrf_token %}
+  <input type="hidden" name="id" value="{{ broadcaster.id }}">
+  <div class="layui-form-item">
+  <label class="layui-form-label">主播编号</label>
+  <div class="layui-input-block">
+    <input type="text" name="broadcaster_code" placeholder="主播编号" class="layui-input" value="{{ broadcaster.broadcaster_code }}"/>
+  </div>
+</div>
+
+<div class="layui-form-item">
+  <label class="layui-form-label">主播姓名</label>
+  <div class="layui-input-block">
+    <input type="text" name="broadcaster_name" placeholder="主播姓名" class="layui-input" value="{{ broadcaster.broadcaster_name }}"/>
+  </div>
+</div>
+
+<div class="layui-form-item">
+  <label class="layui-form-label">性别</label>
+  <div class="layui-input-block">
+    <input type="text" name="gender" placeholder="性别" class="layui-input" value="{{ broadcaster.gender }}"/>
+  </div>
+</div>
+
+<div class="layui-form-item">
+  <label class="layui-form-label">年龄</label>
+  <div class="layui-input-block">
+    <input type="text" name="age" placeholder="年龄" class="layui-input" value="{{ broadcaster.age }}"/>
+  </div>
+</div>
+
+<div class="layui-form-item">
+  <label class="layui-form-label">签约平台</label>
+  <div class="layui-input-block">
+    <input type="text" name="signed_platform" placeholder="签约平台" class="layui-input" value="{{ broadcaster.signed_platform }}"/>
+  </div>
+</div>
+
+<div class="layui-form-item">
+  <label class="layui-form-label">运营公司</label>
+  <div class="layui-input-block">
+    <input type="text" name="operating_company" placeholder="运营公司" class="layui-input" value="{{ broadcaster.operating_company }}"/>
+  </div>
+</div>
+
+<div class="layui-form-item">
+  <label class="layui-form-label">个人主页</label>
+  <div class="layui-input-block">
+    <input type="text" name="personal_homepage" placeholder="个人主页" class="layui-input" value="{{ broadcaster.personal_homepage }}"/>
+  </div>
+</div>
+
+<div class="layui-form-item">
+  <label class="layui-form-label">特长</label>
+  <div class="layui-input-block">
+    <input type="text" name="expertise" placeholder="特长" class="layui-input" value="{{ broadcaster.expertise }}"/>
+  </div>
+</div>
+
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+    </div>
+  </div>
+</div>
+<script src="{% static 'lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.$
+            , laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#date1'
+        });
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            $.post('/edit_broadcaster/', data.field, function (res) {
+                if (res['code'] === 200) {
+                    var iframeIndex = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(iframeIndex);
+                    window.parent.location.reload()
+                } else {
+                    layer.msg(res['msg'])
+                    return false
+                }
+            })
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

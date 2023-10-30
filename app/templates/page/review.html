@@ -1,0 +1,373 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>直播复盘</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="{% static 'lib/layui-v2.6.3/css/layui.css' %}" media="all">
+  <link rel="stylesheet" href="{% static 'lib/font-awesome-4.7.0/css/font-awesome.min.css' %}" media="all">
+  <link rel="stylesheet" href="{% static 'css/public.css' %}" media="all">
+</head>
+<style>
+    .layui-top-box {
+        padding: 40px 20px 20px 20px;
+        color: #fff
+    }
+
+    .panel {
+        margin-bottom: 17px;
+        background-color: #fff;
+        border: 1px solid transparent;
+        border-radius: 3px;
+        -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+        box-shadow: 0 1px 1px rgba(0, 0, 0, .05)
+    }
+
+    .panel-body {
+        padding: 15px
+    }
+
+    .panel-title {
+        margin-top: 0;
+        margin-bottom: 0;
+        font-size: 14px;
+        color: inherit
+    }
+
+    .label {
+        display: inline;
+        padding: .2em .6em .3em;
+        font-size: 75%;
+        font-weight: 700;
+        line-height: 1;
+        color: #fff;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        border-radius: .25em;
+        margin-top: .3em;
+    }
+
+    .layui-red {
+        color: red
+    }
+
+    .main_btn > p {
+        height: 40px;
+    }
+</style>
+<body>
+<div class="layuimini-container">
+  <fieldset class="table-search-fieldset">
+    <legend>搜索信息</legend>
+    <div style="margin: 10px 10px 10px 10px">
+      <form class="layui-form layui-form-pane" action="">
+        <div class="layui-form-item">
+          <div class="layui-inline">
+            <label class="layui-form-label">直播编号</label>
+            <div class="layui-input-inline">
+              <input type="text" name="broadcast_code" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-inline">
+            <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i
+              class="layui-icon"></i> 搜 索
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </fieldset>
+  <br>
+  <h1 style="margin-left: 20px;margin-top: 30px">直播名称:{{ instance.broadcast_name }}</h1>
+  <div class="layuimini-main layui-top-box">
+    <div class="layui-row layui-col-space10">
+      <div class="layui-col-md2">
+        <div class="col-xs-6 col-md-3">
+          <div class="panel layui-bg-cyan">
+            <div class="panel-body">
+              <div class="panel-title">
+                <span class="label pull-right layui-bg-blue"></span>
+                <h5>直播实时人数</h5>
+              </div>
+              <div class="panel-content">
+                <h1 class="no-margins">{{ instance.live_viewers }}</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="layui-col-md2">
+        <div class="col-xs-6 col-md-3">
+          <div class="panel layui-bg-blue">
+            <div class="panel-body">
+              <div class="panel-title">
+                <span class="label pull-right layui-bg-cyan"></span>
+                <h5>粉丝平均停留时间</h5>
+              </div>
+              <div class="panel-content">
+                <h1 class="no-margins">{{ instance.average_fan_duration }}</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="layui-col-md2">
+        <div class="col-xs-6 col-md-3">
+          <div class="panel layui-bg-green">
+            <div class="panel-body">
+              <div class="panel-title">
+                <span class="label pull-right layui-bg-orange"></span>
+                <h5>打赏金额</h5>
+              </div>
+              <div class="panel-content">
+                <h1 class="no-margins">{{ instance.tips_amount }}</h1>
+                {#                                <div class="stat-percent font-bold text-gray"><i class="fa fa-commenting"></i> {{ predict_count }}</div>#}
+                {#                                <small>当前分类总记录数</small>#}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="layui-col-md2">
+        <div class="col-xs-6 col-md-3">
+          <div class="panel layui-bg-orange">
+            <div class="panel-body">
+              <div class="panel-title">
+                <span class="label pull-right layui-bg-green"></span>
+                <h5>互动次数</h5>
+              </div>
+              <div class="panel-content">
+                <h1 class="no-margins">{{ instance.interaction_count }}</h1>
+                {#                                <div class="stat-percent font-bold text-gray"><i class="fa fa-commenting"></i> {{ export_count }}</div>#}
+                {#                                <small>当前分类总记录数</small>#}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="layui-col-md2">
+        <div class="col-xs-6 col-md-3">
+          <div class="panel layui-bg-red">
+            <div class="panel-body">
+              <div class="panel-title">
+                <span class="label pull-right layui-bg-green"></span>
+                <h5>交易总价</h5>
+              </div>
+              <div class="panel-content">
+                <h1 class="no-margins">{{ sales.total_price }}</h1>
+                {#                                <div class="stat-percent font-bold text-gray"><i class="fa fa-commenting"></i> {{ export_count }}</div>#}
+                {#                                <small>当前分类总记录数</small>#}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="layui-box">
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-xs12 layui-col-md9">
+        <div id="echarts-records" style="background-color:#ffffff;min-height:400px;padding: 10px"></div>
+      </div>
+      <div class="layui-col-xs12 layui-col-md3">
+        <div id="echarts-pies" style="background-color:#ffffff;min-height:400px;padding: 10px"></div>
+      </div>
+    </div>
+
+
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-xs12 layui-col-md6">
+        <div id="echarts-dataset" style="background-color:#ffffff;min-height:300px;padding: 10px"></div>
+      </div>
+      <div class="layui-col-xs12 layui-col-md6">
+        <div id="echarts-map" style="background-color:#ffffff;min-height:300px;padding: 10px"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="{% static 'lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
+<script src="{% static 'js/lay-config.js' %}" charset="utf-8"></script>
+<script>
+    layui.use(['layer', 'echarts'], function () {
+        var $ = layui.jquery,
+            layer = layui.layer,
+            echarts = layui.echarts;
+
+        /**
+         * 报表功能
+         */
+        var echartsRecords = echarts.init(document.getElementById('echarts-records'), 'walden');
+
+        var optionRecords = {
+            title: {
+                text: '报表图'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                        backgroundColor: '#6a7985'
+                    }
+                }
+            },
+            legend: {
+                data: {{ dx_name|safe }}
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: {{ d_time|safe }}
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '实时人数',
+                    type: 'line',
+                    stack: '总量',
+                    areaStyle: {},
+                    data: {{ x1|safe }}
+                },
+                {
+                    name: '粉丝平均停留时间',
+                    type: 'line',
+                    areaStyle: {},
+                    data:  {{ x2|safe }}
+                },
+                {
+                    name: '功能点击数',
+                    type: 'line',
+                    stack: '总量',
+                    areaStyle: {},
+                    data:  {{ x3|safe }}
+                },
+                {
+                    name: '打赏金额',
+                    type: 'line',
+                    stack: '总量',
+                    areaStyle: {},
+                    data:  {{ x4|safe }}
+                },
+                {
+                    name: '互动数',
+                    type: 'line',
+                    stack: '总量',
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'top'
+                        }
+                    },
+                    areaStyle: {},
+                    data:  {{ x5|safe }}
+                }
+            ]
+        };
+        echartsRecords.setOption(optionRecords);
+
+
+        /**
+         * 玫瑰图表
+         */
+        var echartsPies = echarts.init(document.getElementById('echarts-pies'), 'walden');
+        var optionPies = {
+            title: {
+                text: '实时人数top5',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: {{ top5_dx|safe }}
+            },
+            series: [
+                {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: '55%',
+                    center: ['50%', '60%'],
+                    roseType: 'radius',
+                    data: {{ top_5_pie|safe }},
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        echartsPies.setOption(optionPies);
+
+
+        /**
+         * 柱状图
+         */
+        var echartsDataset = echarts.init(document.getElementById('echarts-dataset'), 'walden');
+
+        var optionDataset = {
+             title: {
+                text: 'top销量商品',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+            },
+
+            xAxis: {
+                type: 'category',
+                data: {{ top_sales_x|safe }}
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    data: {{ top_sales_y|safe }},
+                    type: 'bar',
+                    showBackground: true,
+                    backgroundStyle: {
+                        color: 'rgba(180, 180, 180, 0.2)'
+                    }
+                }
+            ]
+        };
+
+        echartsDataset.setOption(optionDataset);
+
+        // echarts 窗口缩放自适应
+        window.onresize = function () {
+            echartsRecords.resize();
+        }
+
+    });
+</script>
+</body>
+</html>

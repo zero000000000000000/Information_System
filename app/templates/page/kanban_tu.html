@@ -1,0 +1,147 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>主页一</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="{% static 'lib/layui-v2.6.3/css/layui.css' %}" media="all">
+  <link rel="stylesheet" href="{% static 'lib/font-awesome-4.7.0/css/font-awesome.min.css' %}" media="all">
+  <link rel="stylesheet" href="{% static 'css/public.css' %}" media="all">
+</head>
+<style>
+    .layui-top-box {
+        padding: 40px 20px 20px 20px;
+        color: #fff
+    }
+
+    .panel {
+        margin-bottom: 17px;
+        background-color: #fff;
+        border: 1px solid transparent;
+        border-radius: 3px;
+        -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+        box-shadow: 0 1px 1px rgba(0, 0, 0, .05)
+    }
+
+    .panel-body {
+        padding: 15px
+    }
+
+    .panel-title {
+        margin-top: 0;
+        margin-bottom: 0;
+        font-size: 14px;
+        color: inherit
+    }
+
+    .label {
+        display: inline;
+        padding: .2em .6em .3em;
+        font-size: 75%;
+        font-weight: 700;
+        line-height: 1;
+        color: #fff;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        border-radius: .25em;
+        margin-top: .3em;
+    }
+
+    .layui-red {
+        color: red
+    }
+
+    .main_btn > p {
+        height: 40px;
+    }
+</style>
+<body>
+<div class="layuimini-container">
+  <div class="layui-box">
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-xs12 layui-col-md12">
+        <div id="echarts-records" style="background-color:#ffffff;min-height:400px;padding: 10px"></div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+<script src="{% static 'lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
+<script src="{% static 'js/lay-config.js' %}" charset="utf-8"></script>
+<script>
+    layui.use(['layer', 'echarts'], function () {
+        var $ = layui.jquery,
+            layer = layui.layer,
+            echarts = layui.echarts;
+
+        {#top 10 主播粉丝数#}
+        var echartsPies = echarts.init(document.getElementById('echarts-records'), 'walden');
+        var optionPies = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: {{ dx_name|safe }}
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: {{ d_time|safe }}
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name: '实时人数',
+                    type: 'line',
+                    data: {{ x1|safe }}
+                },
+                {
+                    name: '粉丝平均停留时间',
+                    type: 'line',
+                    data:  {{ x2|safe }}
+                },
+                {
+                    name: '功能点击数',
+                    type: 'line',
+                    data:  {{ x3|safe }}
+                },
+                {
+                    name: '打赏金额',
+                    type: 'line',
+                    data:  {{ x4|safe }}
+                },
+                {
+                    name: '互动数',
+                    type: 'line',
+                    data:  {{ x5|safe }}
+                }
+            ]
+        };
+        echartsPies.setOption(optionPies);
+
+        // echarts 窗口缩放自适应
+        window.onresize = function () {
+            echartsRecords.resize();
+        }
+    })
+</script>
+</body>
+</html>
